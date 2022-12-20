@@ -21,7 +21,7 @@ class Root extends GetView<NavigationController> {
                   icon: Icon(Icons.person_rounded), label: 'Profile'),
             ],
             currentIndex: controller.selectedIndex,
-            selectedItemColor: Colors.pink,
+            selectedItemColor: Colors.blue,
             onTap: (int idx) {
               controller.setIndex = idx;
             },
