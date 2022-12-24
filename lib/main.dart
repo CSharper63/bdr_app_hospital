@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       initialBinding: AppBindings(),
-      home: Root(),
+      home: const Root(),
     );
   }
 }
