@@ -8,14 +8,19 @@ class Root extends GetView<NavigationController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(child: Obx(() => controller.pages.elementAt(controller.selectedIndex))),
+        body: Center(
+            child: Obx(
+                () => controller.pages.elementAt(controller.selectedIndex))),
         bottomNavigationBar: Obx(
           () => BottomNavigationBar(
             items: const [
-              BottomNavigationBarItem(icon: Icon(Icons.list_rounded), label: 'Liste rendez-vous'),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.medical_information_rounded), label: 'Liste des patients'),
-              BottomNavigationBarItem(icon: Icon(Icons.numbers), label: 'Analytics'),
+                  icon: Icon(Icons.list_rounded), label: 'Liste rendez-vous'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.medical_information_rounded),
+                  label: 'Liste des patients'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.numbers), label: 'Analytics'),
             ],
             currentIndex: controller.selectedIndex,
             selectedItemColor: Colors.blue,
