@@ -8,7 +8,7 @@ class NavigationController extends GetxController {
   final RxInt _selectedIndex = 0.obs;
 
   final List<Widget> _pages = [
-    const RdvPage(),
+    RdvPage(),
     const PatientListPage(),
     const AnalyticsPage()
   ];

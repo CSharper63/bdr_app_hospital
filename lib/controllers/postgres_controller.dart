@@ -13,9 +13,13 @@ class PostgresController extends GetxController {
   final RxList<List> _listPatients = RxList();
   final RxList<List> _listRdv = RxList();
   final RxList<List> _listAnalytics = RxList();
+  final RxList<List> _listEmployesService = RxList();
 
+  PostgreSQLConnection get db => _connection;
   List<List> get listAnalytics => _listAnalytics.value;
+  List<List> get listEmployeService => _listEmployesService.value;
   List<List> get listPatients => _listPatients.value;
+
   List<List> get listRdv => _listRdv.value;
 
   @override
@@ -35,6 +39,22 @@ class PostgresController extends GetxController {
     });
   }
 
+  Future<bool> updateRdv(int id, String newdate) async {
+    dev.log('try update $id, with $newdate');
+
+    return await _connection
+        .query(
+      " CALL update_rdv($id, '$newdate')",
+    )
+        .then((value) {
+      _getListRdv();
+      _getAnalytics();
+      return true;
+    }).catchError((onError) {
+      return false;
+    });
+  }
+
   Future<List<List>> _getAnalytics() async {
     final result = await _connection.query(" SELECT * FROM afficheranalytics");
 
@@ -43,6 +63,14 @@ class PostgresController extends GetxController {
     dev.log('result: $result');
     _listAnalytics.value = result;
 
+    return result;
+  }
+
+  Future<List<List>> _getEmployeService() async {
+    final result =
+        await _connection.query(" SELECT * FROM afficherEmployeService");
+    dev.log('rdv fetched: ${result.length}');
+    _listRdv.value = result;
     return result;
   }
 

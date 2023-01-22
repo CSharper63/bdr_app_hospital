@@ -17,7 +17,7 @@ class PatientListPage extends GetView<PostgresController> {
                 //get your item data here ...
                 return Card(
                   child: ListTile(
-                    title: Text("${"Nom du patient : " + item[4]} " + item[3]),
+                    title: Text("${item[4]} ${item[3]}"),
                     subtitle: Text(
                         "Date de naissance : ${DateFormat('dd-MM-yyyy').format(item[5])}"),
                   ),
