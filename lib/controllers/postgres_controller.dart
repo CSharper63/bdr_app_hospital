@@ -69,8 +69,8 @@ class PostgresController extends GetxController {
   Future<List<List>> _getEmployeService() async {
     final result =
         await _connection.query(" SELECT * FROM afficherEmployeService");
-    dev.log('rdv fetched: ${result.length}');
-    _listRdv.value = result;
+    dev.log('services fetched: ${result.length}');
+    _listEmployesService.value = result;
     return result;
   }
 
