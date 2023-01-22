@@ -34,6 +34,7 @@ class PostgresController extends GetxController {
       _getAnalytics();
       _getListPatient();
       _getListRdv();
+      _getEmployeService();
     }).catchError((onError) {
       dev.log('Error: $onError');
     });
