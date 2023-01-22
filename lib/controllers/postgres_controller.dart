@@ -1,54 +1,50 @@
-import 'dart:developer' as dev;
-
-import 'package:bdr_hospital_app/models/personne.dart';
 import 'package:bdr_hospital_app/services/postgres_service.dart';
 import 'package:get/get.dart';
 import 'package:postgres/postgres.dart';
 
 class PostgresController extends GetxController {
   final String _searchPath = 'SET search_path TO hopital;';
-  final _connection = PostgreSQLConnection(
+  var _connection = PostgreSQLConnection(
       PostgresService.host, PostgresService.port, PostgresService.databaseName,
       username: PostgresService.username, password: PostgresService.password);
-  @override
-  Future<void> onInit() async {
-    super.onInit();
-    dev.log('PostgresController onInit');
-    await _connection.open().then((_) {
-      dev.log('Connection success');
+
+  Future<List<List>> getListPatient() async {
+    var results;
+
+    await _connection.open().then((_) async {
       _setSearchPath();
-      _fetchMedecin();
-      _fetchPatient();
-      _fetchRdv();
-    }).catchError((onError) {
-      dev.log('Error: $onError');
+
+      return results = await _connection.query(" SELECT * FROM afficherpatient");
     });
+
+    return results;
   }
 
-  void _fetchMedecin() async {
-    final result = await _connection.query(' SELECT * FROM personne');
+  Future<List<List>> getListRdv() async {
+    var results;
 
-    for (var row in result.toList()) {
-      dev.log('row: $row');
+    await _connection.open().then((_) async {
+      _setSearchPath();
 
-      var p = Personne.fromPostgre(row);
+      return results = await _connection.query(" SELECT * FROM afficherrdvpatient");
+    });
 
-      dev.log('p: $p');
-    }
+    return results;
   }
 
-  void _fetchPatient() async {
-    final result = await _connection.query(' SELECT * FROM patient');
-    dev.log('result: $result');
-  }
+  Future<List<List>> getAnalytics() async {
+    var results;
 
-  void _fetchRdv() async {
-    final result = await _connection.query(' SELECT * FROM rendezvous');
-    dev.log('result: $result');
+    await _connection.open().then((_) async {
+      _setSearchPath();
+
+      return results = await _connection.query(" SELECT * FROM afficheranalytics");
+    });
+
+    return results;
   }
 
   void _setSearchPath() async {
-    final result = await _connection.query(_searchPath);
-    dev.log('result: $result');
+    await _connection.query(_searchPath);
   }
 }
