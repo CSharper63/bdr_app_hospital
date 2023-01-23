@@ -26,9 +26,9 @@ class PostgresController extends GetxController {
   PostgreSQLConnection get db => _connection;
   DbStatus get dbStatus => _dbStatus.value;
   List<List> get listAnalytics => _listAnalytics.value;
-  List<Employe> get listEmploye => _listEmployees.value;
+  List<Employe> get listEmployees => _listEmployees.value;
 
-  List<List> get listEmployeService => _listEmployesService.value;
+  List<List> get listEmployeesService => _listEmployesService.value;
   List<Patient> get listPatients => _listPatients.value;
 
   List<Rdv> get listRdv => _listRdv.value;
@@ -119,12 +119,12 @@ class PostgresController extends GetxController {
 
     final result2 = List.generate(result.length, (i) {
       return Employe(
-        nomService: result[i][9],
-        nomPoste: result[i][10],
-        prenom: result[i][2],
-        nom: result[i][1],
+        nomService: result[i][10],
+        nomPoste: result[i][11],
+        prenom: result[i][3],
+        nom: result[i][2],
         noAvs: result[i][0],
-        dateDeNaissance: result[i][3],
+        dateDeNaissance: result[i][4],
       );
     });
     _listEmployees.value = result2;
