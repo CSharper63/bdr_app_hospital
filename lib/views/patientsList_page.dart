@@ -13,14 +13,14 @@ class PatientListPage extends GetView<PostgresController> {
         body: Obx(() => ListView.builder(
               itemCount: controller.listPatients.length,
               itemBuilder: (_, int position) {
-                final item = controller.listPatients[position];
+                final patient = controller.listPatients[position];
                 //get your item data here ...
                 return Card(
                   child: ListTile(
                     leading: const Icon(Icons.person_rounded),
-                    title: Text("${item[4]} ${item[3]}"),
+                    title: Text("${patient.prenom} ${patient.nom}"),
                     subtitle: Text(
-                        "Date de naissance : ${DateFormat('dd-MM-yyyy').format(item[5])}"),
+                        "Date de naissance : ${DateFormat('dd-MM-yyyy').format(patient.dateDeNaissance)}"),
                   ),
                 );
               },

@@ -1,5 +1,6 @@
 import 'dart:developer' as dev;
 
+import 'package:bdr_hospital_app/models/patient.dart';
 import 'package:bdr_hospital_app/models/rdv.dart';
 import 'package:bdr_hospital_app/services/postgres_service.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class PostgresController extends GetxController {
 
   final Rx<DbStatus> _dbStatus = DbStatus.undefined.obs;
 
-  final RxList<List> _listPatients = RxList();
+  final RxList<Patient> _listPatients = RxList();
   final RxList<Rdv> _listRdv = RxList();
   final RxList<List> _listAnalytics = RxList();
   final RxList<List> _listEmployesService = RxList();
@@ -24,7 +25,7 @@ class PostgresController extends GetxController {
   PostgreSQLConnection get db => _connection;
   List<List> get listAnalytics => _listAnalytics.value;
   List<List> get listEmployeService => _listEmployesService.value;
-  List<List> get listPatients => _listPatients.value;
+  List<Patient> get listPatients => _listPatients.value;
 
   List<Rdv> get listRdv => _listRdv.value;
 
@@ -98,19 +99,26 @@ class PostgresController extends GetxController {
   }
 
   Future<List<List>> _getEmployeService() async {
-    final result =
-        await _connection.query(" SELECT * FROM afficherEmployeService");
+    final result = await _connection.query(" SELECT * FROM afficherEmployeService");
     dev.log('services fetched: ${result.length}');
     _listEmployesService.value = result;
     return result;
   }
 
-  Future<List<List>> _getListPatient() async {
+  Future<List<Patient>> _getListPatient() async {
     final result = await _connection.query(" SELECT * FROM afficherpatient");
     dev.log('patient fetched: ${result.length}');
-    _listPatients.value = result;
 
-    return result;
+    final result2 = List.generate(result.length, (i) {
+      return Patient(
+        dateDeNaissance: result[i][5],
+        nom: result[i][3],
+        prenom: result[i][4],
+      );
+    });
+    _listPatients.value = result2;
+
+    return result2;
   }
 
   Future<List<Rdv>> _getListRdv() async {
