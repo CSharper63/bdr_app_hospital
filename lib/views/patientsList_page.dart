@@ -9,6 +9,7 @@ class PatientListPage extends GetView<PostgresController> {
 
   @override
   Widget build(BuildContext context) {
+    RxInt selectedDoc = controller.listEmployees[0].noAvs.obs;
     return Scaffold(
         appBar: AppBar(title: const Text('Liste des patients'), actions: [
           IconButton(
@@ -50,16 +51,21 @@ class PatientListPage extends GetView<PostgresController> {
                             hintText: '2000-01-01',
                             labelText: 'Date de naissance *',
                           )),
-                      TextFormField(
-                          validator: (String? value) {
-                            return (value != null && value.contains('@'))
-                                ? 'Do not use the @ char.'
-                                : null;
+                      Obx(
+                        () => DropdownButton(
+                          value: selectedDoc.value ?? 0,
+                          icon: const Icon(Icons.keyboard_arrow_down),
+                          items: controller.listEmployees.map((e) {
+                            return DropdownMenuItem(
+                              value: e.noAvs,
+                              child: Text('${e.prenom} ${e.nom}'),
+                            );
+                          }).toList(),
+                          onChanged: (int? value) {
+                            selectedDoc.value = value ?? selectedDoc.value;
                           },
-                          decoration: const InputDecoration(
-                            icon: Icon(Icons.person),
-                            labelText: 'Médcein *',
-                          ))
+                        ),
+                      )
                     ]));
               }),
         ]),

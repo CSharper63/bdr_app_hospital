@@ -49,11 +49,16 @@ class AnalyticsPage extends GetView<PostgresController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Obx(() => Text("${controller.listEmployeService[0]}")),
-                        Obx(() => Text("${controller.listEmployeService[1]}")),
-                        Obx(() => Text("${controller.listEmployeService[2]}")),
-                        Obx(() => Text("${controller.listEmployeService[3]}")),
-                        Obx(() => Text("${controller.listEmployeService[4]}")),
+                        Obx(() =>
+                            Text("${controller.listEmployeesService[0]}")),
+                        Obx(() =>
+                            Text("${controller.listEmployeesService[1]}")),
+                        Obx(() =>
+                            Text("${controller.listEmployeesService[2]}")),
+                        Obx(() =>
+                            Text("${controller.listEmployeesService[3]}")),
+                        Obx(() =>
+                            Text("${controller.listEmployeesService[4]}")),
                       ],
                     ))
               ])
