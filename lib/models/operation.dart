@@ -1,11 +1,11 @@
 class Operation {
   int id;
-  String dureeConvalescence;
+  int dureeConvalescence;
   int dureeEnHeure;
   int idTypeOperation;
   int salleOperation;
   String nomPosteChirurgien;
-  String idChirurgien;
+  int idChirurgien;
   DateTime date;
   int idPatient;
   String description;
