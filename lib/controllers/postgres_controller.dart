@@ -19,6 +19,13 @@ class PostgresController extends GetxController {
   final Rx<DbStatus> _dbStatus = Rx(DbStatus.undefined);
   final RxList<Patient> _listPatients = RxList();
   final RxList<Employe> _listEmployees = RxList();
+  final RxList<Employe> _listMedecinGeneraliste = RxList();
+  final RxList<Employe> _listPersoMedical = RxList();
+  final RxList<Employe> _listInfirmier = RxList();
+  final RxList<Employe> _listUrologue = RxList();
+  final RxList<Employe> _listOncologue = RxList();
+  final RxList<Employe> _listCardiologue = RxList();
+
   final RxList<Rdv> _listRdv = RxList();
   final RxList<List> _listAnalytics = RxList();
   final RxList<List> _listEmployesService = RxList();
@@ -26,12 +33,18 @@ class PostgresController extends GetxController {
   PostgreSQLConnection get db => _connection;
   DbStatus get dbStatus => _dbStatus.value;
   List<List> get listAnalytics => _listAnalytics.value;
+  List<Employe> get listCardiologue => _listCardiologue.value;
   List<Employe> get listEmployees => _listEmployees.value;
-
   List<List> get listEmployeesService => _listEmployesService.value;
+  List<Employe> get listInfirmier => _listInfirmier.value;
+  List<Employe> get listMedecinGeneraliste => _listMedecinGeneraliste.value;
+  List<Employe> get listOncologue => _listOncologue.value;
   List<Patient> get listPatients => _listPatients.value;
 
+  List<Employe> get listPersoMedical => _listPersoMedical.value;
   List<Rdv> get listRdv => _listRdv.value;
+
+  List<Employe> get listUrologue => _listUrologue.value;
 
   @override
   void onInit() {
@@ -123,7 +136,7 @@ class PostgresController extends GetxController {
   }
 
   Future<List<List>> _getAnalytics() async {
-    final result = await _connection.query(" SELECT * FROM afficheranalytics");
+    final result = await _connection.query("SELECT * FROM afficheranalytics");
 
     dev.log('analytics fetched: ${result.length}');
 
@@ -141,8 +154,7 @@ class PostgresController extends GetxController {
   }
 
   Future<List<Employe>> _getListEmployees() async {
-    final result = await _connection.query(" SELECT * FROM afficheremployes");
-    dev.log('employees fetched: ${result.length}');
+    final result = await _connection.query("SELECT * FROM afficheremployes");
 
     final result2 = List.generate(result.length, (i) {
       return Employe(
@@ -155,12 +167,35 @@ class PostgresController extends GetxController {
       );
     });
     _listEmployees.value = result2;
+    _listPersoMedical.value =
+        _listEmployees.where((e) => e.nomService != 'Reception').toList();
+    _listMedecinGeneraliste.value = _listEmployees
+        .where((e) => e.nomPoste == 'Medecin generaliste')
+        .toList();
+
+    _listCardiologue.value =
+        _listPersoMedical.where((e) => e.nomPoste == 'Cardiologue').toList();
+
+    _listOncologue.value =
+        _listPersoMedical.where((e) => e.nomPoste == 'Oncologue').toList();
+
+    _listUrologue.value =
+        _listPersoMedical.where((e) => e.nomPoste == 'Urologue').toList();
+
+    _listInfirmier.value =
+        _listPersoMedical.where((e) => e.nomPoste == 'Infirmier').toList();
+
+    dev.log('doc généraliste fetched: ${_listMedecinGeneraliste.length}');
+    dev.log('Cardiologue fetched: ${_listCardiologue.length}');
+    dev.log('Oncologue fetched: ${_listOncologue.length}');
+    dev.log('Urologue fetched: ${_listUrologue.length}');
+    dev.log('Infirmier fetched: ${_listInfirmier.length}');
 
     return result2;
   }
 
   Future<List<Patient>> _getListPatient() async {
-    final result = await _connection.query(" SELECT * FROM afficherpatient");
+    final result = await _connection.query("SELECT * FROM afficherpatient");
     dev.log('patient fetched: ${result.length}');
 
     final result2 = List.generate(result.length, (i) {
@@ -176,7 +211,7 @@ class PostgresController extends GetxController {
   }
 
   Future<List<Rdv>> _getListRdv() async {
-    final result = await _connection.query(" SELECT * FROM afficherrdvpatient");
+    final result = await _connection.query("SELECT * FROM afficherrdvpatient");
     dev.log('rdv fetched: ${result.length}');
     final result2 = List.generate(result.length, (i) {
       return Rdv(

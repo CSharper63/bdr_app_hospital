@@ -1,4 +1,5 @@
 import 'package:bdr_hospital_app/controllers/postgres_controller.dart';
+import 'package:bdr_hospital_app/models/employe.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -7,6 +8,8 @@ class AnalyticsPage extends GetView<PostgresController> {
 
   @override
   Widget build(BuildContext context) {
+    const TextStyle txtStyle =
+        TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
     return Scaffold(
         appBar: AppBar(title: const Text('Analytics')),
         body: Obx(() => controller.dbStatus == DbStatus.connected
@@ -60,7 +63,105 @@ class AnalyticsPage extends GetView<PostgresController> {
                         Obx(() =>
                             Text("${controller.listEmployeesService[4]}")),
                       ],
-                    ))
+                    )),
+                Container(
+                    padding: const EdgeInsets.all(5),
+                    child: const Text('Médecins généraliste', style: txtStyle)),
+                Container(
+                    padding: const EdgeInsets.all(5),
+                    child: Obx(() => ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: controller.listMedecinGeneraliste.length,
+                          itemBuilder: (_, int position) {
+                            final Employe doc =
+                                controller.listMedecinGeneraliste[position];
+                            //get your item data here ...
+                            return Card(
+                              child: ListTile(
+                                leading:
+                                    const Icon(Icons.health_and_safety_rounded),
+                                title: Text("${doc.prenom} ${doc.nom}"),
+                                subtitle: const Text("TODO % travail"),
+                              ),
+                            );
+                          },
+                        ))),
+                Container(
+                    padding: const EdgeInsets.all(5),
+                    child: const Text('Urologue', style: txtStyle)),
+                Container(
+                    padding: const EdgeInsets.all(5),
+                    child: Obx(() => ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: controller.listUrologue.length,
+                          itemBuilder: (_, int position) {
+                            final Employe doc =
+                                controller.listUrologue[position];
+                            //get your item data here ...
+                            return Card(
+                              child: ListTile(
+                                leading:
+                                    const Icon(Icons.health_and_safety_rounded),
+                                title: Text("${doc.prenom} ${doc.nom}"),
+                                subtitle: const Text("TODO % travail"),
+                              ),
+                            );
+                          },
+                        ))),
+                Container(
+                    padding: const EdgeInsets.all(5),
+                    child: const Text(
+                      'Oncologue',
+                      style: txtStyle,
+                    )),
+                Container(
+                    padding: const EdgeInsets.all(5),
+                    child: Obx(() => ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: controller.listOncologue.length,
+                          itemBuilder: (_, int position) {
+                            final Employe doc =
+                                controller.listOncologue[position];
+                            //get your item data here ...
+                            return Card(
+                              child: ListTile(
+                                leading:
+                                    const Icon(Icons.health_and_safety_rounded),
+                                title: Text("${doc.prenom} ${doc.nom}"),
+                                subtitle: const Text("TODO % travail"),
+                              ),
+                            );
+                          },
+                        ))),
+                Container(
+                    padding: const EdgeInsets.all(5),
+                    child: const Text('Infirmier', style: txtStyle)),
+                Container(
+                    padding: const EdgeInsets.all(5),
+                    child: Obx(() => ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: controller.listInfirmier.length,
+                          itemBuilder: (_, int position) {
+                            final Employe doc =
+                                controller.listInfirmier[position];
+                            //get your item data here ...
+                            return Card(
+                              child: ListTile(
+                                leading:
+                                    const Icon(Icons.health_and_safety_rounded),
+                                title: Text("${doc.prenom} ${doc.nom}"),
+                                subtitle: const Text("TODO % travail"),
+                              ),
+                            );
+                          },
+                        ))),
               ])
             : const Center(child: CircularProgressIndicator())));
   }
