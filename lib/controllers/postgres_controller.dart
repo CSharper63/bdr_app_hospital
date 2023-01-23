@@ -16,8 +16,7 @@ class PostgresController extends GetxController {
       PostgresService.host, PostgresService.port, PostgresService.databaseName,
       username: PostgresService.username, password: PostgresService.password);
 
-  final Rx<DbStatus> _dbStatus = DbStatus.undefined.obs;
-
+  final Rx<DbStatus> _dbStatus = Rx(DbStatus.undefined);
   final RxList<Patient> _listPatients = RxList();
   final RxList<Employe> _listEmploye = RxList();
   final RxList<Rdv> _listRdv = RxList();
@@ -25,18 +24,21 @@ class PostgresController extends GetxController {
   final RxList<List> _listEmployesService = RxList();
 
   PostgreSQLConnection get db => _connection;
+  DbStatus get dbStatus => _dbStatus.value;
   List<List> get listAnalytics => _listAnalytics.value;
   List<List> get listEmployeService => _listEmployesService.value;
+
   List<Patient> get listPatients => _listPatients.value;
   List<Employe> get listEmploye => _listEmploye.value;
 
   List<Rdv> get listRdv => _listRdv.value;
 
   @override
-  Future<void> onInit() async {
+  void onInit() {
     super.onInit();
+
     dev.log('PostgresController onInit');
-    await _connection.open().then((_) {
+    _connection.open().then((_) {
       dev.log('Connection success');
       _setSearchPath();
 
@@ -57,14 +59,14 @@ class PostgresController extends GetxController {
         case DbStatus.unreachable:
           Get.showSnackbar(const GetSnackBar(
             message: 'Impossible de se connecter à la base de donnée',
-            duration: Duration(seconds: 1),
+            duration: Duration(seconds: 2),
             backgroundColor: Colors.red,
           ));
           break;
         case DbStatus.connected:
           Get.showSnackbar(const GetSnackBar(
             message: 'Base de donnée connectée !',
-            duration: Duration(seconds: 1),
+            duration: Duration(seconds: 2),
             backgroundColor: Colors.green,
           ));
           break;
@@ -102,7 +104,8 @@ class PostgresController extends GetxController {
   }
 
   Future<List<List>> _getEmployeService() async {
-    final result = await _connection.query(" SELECT * FROM afficherEmployeService");
+    final result =
+        await _connection.query(" SELECT * FROM afficherEmployeService");
     dev.log('services fetched: ${result.length}');
     _listEmployesService.value = result;
     return result;
