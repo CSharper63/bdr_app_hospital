@@ -94,7 +94,23 @@ class PatientListPage extends GetView<PostgresController> {
                             Icons.delete_forever_rounded,
                             color: Color.fromARGB(255, 212, 16, 16),
                           ),
-                          onPressed: () {},
+                          onPressed: () async {
+                            final isDeleted =
+                                await controller.deletePatient(patient.noAvs);
+
+                            if (isDeleted) {
+                              Get.showSnackbar(const GetSnackBar(
+                                message: 'Patient supprimé avec succès !',
+                                duration: Duration(seconds: 1),
+                              ));
+                            } else {
+                              Get.showSnackbar(const GetSnackBar(
+                                message: 'Suppression impossible.',
+                                duration: Duration(seconds: 1),
+                                backgroundColor: Colors.red,
+                              ));
+                            }
+                          },
                         ),
                         leading: const Icon(Icons.person_rounded),
                         title: Text("${patient.prenom} ${patient.nom}"),

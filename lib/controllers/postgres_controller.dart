@@ -46,6 +46,49 @@ class PostgresController extends GetxController {
 
   List<Employe> get listUrologue => _listUrologue.value;
 
+  Future<bool> deletePatient(int noAvs) {
+    dev.log('id to delete $noAvs');
+
+    return _connection
+        .query(
+            "delete from employerendezvous where noavs = $noAvs; delete from rendezvous where fk_idpatient = $noAvs; delete from patient where noavs = $noAvs;")
+        .then((value) async {
+      _getListPatient();
+      _getListRdv();
+      return true;
+    }).catchError((onError) {
+      return false;
+    });
+  }
+
+  Future<bool> insertPatient(
+      int noAvs,
+      String nom,
+      String prenom,
+      DateTime dateNaissance,
+      String rue,
+      String numeroRue,
+      String npa,
+      String ville,
+      String pays,
+      String nomPosteMedecinTraitant,
+      int idMedecinTraitant) async {
+    // dev.log('try update $id, with $newdate');
+
+    return await _connection
+        .query(
+      " CALL ajouter_patient($noAvs, $nom , $prenom , $dateNaissance , $rue, $numeroRue, $npa, $ville, $pays, $nomPosteMedecinTraitant, $idMedecinTraitant)",
+    )
+        .then((value) {
+      _getListRdv();
+      _getAnalytics();
+      _getListPatient();
+      return true;
+    }).catchError((onError) {
+      return false;
+    });
+  }
+
   @override
   void onInit() {
     super.onInit();
@@ -107,34 +150,6 @@ class PostgresController extends GetxController {
     });
   }
 
-  Future<bool> insertPatient(
-      int noAvs,
-      String nom,
-      String prenom,
-      DateTime dateNaissance,
-      String rue,
-      String numeroRue,
-      String npa,
-      String ville,
-      String pays,
-      String nomPosteMedecinTraitant,
-      int idMedecinTraitant) async {
-    // dev.log('try update $id, with $newdate');
-
-    return await _connection
-        .query(
-      " CALL ajouter_patient($noAvs, $nom , $prenom , $dateNaissance , $rue, $numeroRue, $npa, $ville, $pays, $nomPosteMedecinTraitant, $idMedecinTraitant)",
-    )
-        .then((value) {
-      _getListRdv();
-      _getAnalytics();
-      _getListPatient();
-      return true;
-    }).catchError((onError) {
-      return false;
-    });
-  }
-
   Future<List<List>> _getAnalytics() async {
     final result = await _connection.query("SELECT * FROM afficheranalytics");
 
@@ -147,7 +162,8 @@ class PostgresController extends GetxController {
   }
 
   Future<List<List>> _getEmployeService() async {
-    final result = await _connection.query(" SELECT * FROM afficherEmployeService");
+    final result =
+        await _connection.query(" SELECT * FROM afficherEmployeService");
     dev.log('services fetched: ${result.length}');
     _listEmployesService.value = result;
     return result;
@@ -200,6 +216,7 @@ class PostgresController extends GetxController {
 
     final result2 = List.generate(result.length, (i) {
       return Patient(
+        noAvs: result[i][0],
         dateDeNaissance: result[i][5],
         nom: result[i][3],
         prenom: result[i][4],
