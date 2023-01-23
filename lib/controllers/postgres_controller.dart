@@ -173,8 +173,7 @@ class PostgresController extends GetxController {
   }
 
   Future<Employe> _getEmployee(int noAvs) async {
-    final result =
-        await _connection.query("SELECT * FROM get_employee($noAvs)");
+    final result = await _connection.query("SELECT * FROM get_employee($noAvs)");
 
     // Obligatoirement qu'un row car noAvs clé primaire
     final result2 = Employe(
@@ -192,8 +191,7 @@ class PostgresController extends GetxController {
   }
 
   Future<List<List>> _getEmployeService() async {
-    final result =
-        await _connection.query(" SELECT * FROM afficherEmployeService");
+    final result = await _connection.query(" SELECT * FROM afficherEmployeService");
     dev.log('services fetched: ${result.length}');
     _listEmployesService.value = result;
     return result;
@@ -214,23 +212,17 @@ class PostgresController extends GetxController {
     }
 
     _listEmployees.value = lst;
-    _listPersoMedical.value =
-        _listEmployees.where((e) => e.nomService != 'Reception').toList();
-    _listMedecinGeneraliste.value = _listEmployees
-        .where((e) => e.nomPoste == 'Medecin generaliste')
-        .toList();
+    _listPersoMedical.value = _listEmployees.where((e) => e.nomService != 'Reception').toList();
+    _listMedecinGeneraliste.value =
+        _listEmployees.where((e) => e.nomPoste == 'Medecin generaliste').toList();
 
-    _listCardiologue.value =
-        _listPersoMedical.where((e) => e.nomPoste == 'Cardiologue').toList();
+    _listCardiologue.value = _listPersoMedical.where((e) => e.nomPoste == 'Cardiologue').toList();
 
-    _listOncologue.value =
-        _listPersoMedical.where((e) => e.nomPoste == 'Oncologue').toList();
+    _listOncologue.value = _listPersoMedical.where((e) => e.nomPoste == 'Oncologue').toList();
 
-    _listUrologue.value =
-        _listPersoMedical.where((e) => e.nomPoste == 'Urologue').toList();
+    _listUrologue.value = _listPersoMedical.where((e) => e.nomPoste == 'Urologue').toList();
 
-    _listInfirmier.value =
-        _listPersoMedical.where((e) => e.nomPoste == 'Infirmier').toList();
+    _listInfirmier.value = _listPersoMedical.where((e) => e.nomPoste == 'Infirmier').toList();
 
     dev.log('doc généraliste fetched: ${_listMedecinGeneraliste.length}');
     dev.log('Cardiologue fetched: ${_listCardiologue.length}');
@@ -307,9 +299,17 @@ class PostgresController extends GetxController {
   Future<Patient> _getPatient(int noAvs) async {
     final result = await _connection.query("SELECT * FROM get_patient($noAvs)");
 
-    // TODO
+    // Obligatoirement qu'un row car noAvs clé primaire
+    final result2 = Patient(
+      noAvs: result[0][0],
+      nom: result[0][1],
+      prenom: result[0][2],
+      dateDeNaissance: result[0][3],
+    );
 
-    return null;
+    dev.log('patient fetched: $result2');
+
+    return result2;
   }
 
   void _setSearchPath() async {
