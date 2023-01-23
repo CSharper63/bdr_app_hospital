@@ -72,7 +72,7 @@ class PostgresController extends GetxController {
       {required int noAvs,
       required String nom,
       required String prenom,
-      required DateTime dateNaissance,
+      required String dateNaissance,
       required String rue,
       required String numeroRue,
       required String npa,
@@ -80,11 +80,11 @@ class PostgresController extends GetxController {
       required String pays,
       required String nomPosteMedecinTraitant,
       required int idMedecinTraitant}) async {
-    // dev.log('try update $id, with $newdate');
-
+    dev.log(
+        "CALL ajouter_patient($noAvs, '$nom ', '$prenom', '$dateNaissance', '$rue', '$numeroRue', '$npa', '$ville', '$pays', '$nomPosteMedecinTraitant', $idMedecinTraitant)");
     return await _connection
         .query(
-      " CALL ajouter_patient($noAvs, $nom , $prenom , $dateNaissance , $rue, $numeroRue, $npa, $ville, $pays, $nomPosteMedecinTraitant, $idMedecinTraitant)",
+      "CALL ajouter_patient($noAvs, '$nom ', '$prenom', '$dateNaissance', '$rue', '$numeroRue', '$npa', '$ville', '$pays', '$nomPosteMedecinTraitant', $idMedecinTraitant)",
     )
         .then((value) {
       _getListRdv();
