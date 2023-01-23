@@ -70,6 +70,7 @@ class AnalyticsPage extends GetView<PostgresController> {
                 Container(
                     padding: const EdgeInsets.all(5),
                     child: Obx(() => ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
                           itemCount: controller.listMedecinGeneraliste.length,
