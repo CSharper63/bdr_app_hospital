@@ -46,21 +46,6 @@ class PostgresController extends GetxController {
 
   List<Employe> get listUrologue => _listUrologue.value;
 
-  Future<bool> deletePatient(int noAvs) {
-    dev.log('id to delete $noAvs');
-
-    return _connection
-        .query(
-            "delete from employerendezvous where noavs = $noAvs; delete from rendezvous where fk_idpatient = $noAvs; delete from patient where noavs = $noAvs;")
-        .then((value) async {
-      _getListPatient();
-      _getListRdv();
-      return true;
-    }).catchError((onError) {
-      return false;
-    });
-  }
-
   Future<bool> insertPatient(
       int noAvs,
       String nom,
@@ -143,6 +128,23 @@ class PostgresController extends GetxController {
     )
         .then((value) {
       _getListRdv();
+      _getAnalytics();
+      return true;
+    }).catchError((onError) {
+      return false;
+    });
+  }
+
+  Future<bool> deletePatient(int noAvs) async {
+    dev.log('Deleting patient noAvs : $noAvs');
+
+    return await _connection
+        .query(
+      " CALL delete_patient($noAvs')",
+    )
+        .then((value) {
+      _getListRdv();
+      _getListPatient();
       _getAnalytics();
       return true;
     }).catchError((onError) {
