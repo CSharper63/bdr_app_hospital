@@ -162,8 +162,7 @@ class PostgresController extends GetxController {
   }
 
   Future<List<List>> _getEmployeService() async {
-    final result =
-        await _connection.query(" SELECT * FROM afficherEmployeService");
+    final result = await _connection.query(" SELECT * FROM afficherEmployeService");
     dev.log('services fetched: ${result.length}');
     _listEmployesService.value = result;
     return result;
@@ -231,6 +230,7 @@ class PostgresController extends GetxController {
         prenomPatient: result[i][8],
         nomPatient: result[i][7],
         idPatient: result[i][2],
+        idMedecin: result[i][6],
       );
     });
 
