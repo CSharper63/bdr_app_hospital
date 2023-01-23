@@ -1,3 +1,6 @@
+import 'package:bdr_hospital_app/models/employe.dart';
+import 'package:bdr_hospital_app/models/patient.dart';
+
 class Operation {
   int id;
   int dureeConvalescence;
@@ -5,9 +8,9 @@ class Operation {
   int idTypeOperation;
   int salleOperation;
   String nomPosteChirurgien;
-  int idChirurgien;
+  Employe employe; // médecin opérant
   DateTime date;
-  int idPatient;
+  Patient patient;
   String description;
 
   Operation({
@@ -17,9 +20,9 @@ class Operation {
     required this.idTypeOperation,
     required this.salleOperation,
     required this.nomPosteChirurgien,
-    required this.idChirurgien,
+    required this.employe,
     required this.date,
-    required this.idPatient,
+    required this.patient,
     required this.description,
   });
 }

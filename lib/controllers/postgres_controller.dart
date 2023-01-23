@@ -254,9 +254,9 @@ class PostgresController extends GetxController {
         idTypeOperation: r[3],
         salleOperation: r[4],
         nomPosteChirurgien: r[5],
-        idChirurgien: r[6],
+        employe: await _getEmployee(r[6]),
         date: r[7],
-        idPatient: r[8],
+        patient: await _getPatient(r[8]),
         description: r[9],
       ));
     }
@@ -302,6 +302,14 @@ class PostgresController extends GetxController {
 
     _listRdv.value = lst;
     return lst;
+  }
+
+  Future<Patient> _getPatient(int noAvs) async {
+    final result = await _connection.query("SELECT * FROM get_patient($noAvs)");
+
+    // TODO
+
+    return null;
   }
 
   void _setSearchPath() async {
