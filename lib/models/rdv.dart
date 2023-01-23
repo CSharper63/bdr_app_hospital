@@ -1,3 +1,5 @@
+import 'package:bdr_hospital_app/models/employe.dart';
+
 class Rdv {
   int id;
   DateTime date;
@@ -5,6 +7,7 @@ class Rdv {
   String nomPatient;
   int idPatient;
   int idMedecin;
+  Employe employe;
 
   Rdv(
       {required this.id,
@@ -12,5 +15,6 @@ class Rdv {
       required this.prenomPatient,
       required this.nomPatient,
       required this.idPatient,
-      required this.idMedecin});
+      required this.idMedecin,
+      required this.employe});
 }

@@ -46,18 +46,36 @@ class PostgresController extends GetxController {
 
   List<Employe> get listUrologue => _listUrologue.value;
 
+  Future<bool> deletePatient(int noAvs) async {
+    dev.log('Deleting patient noAvs : $noAvs');
+
+    return await _connection
+        .query(
+      " CALL delete_patient($noAvs)",
+    )
+        .then((value) {
+      _getListRdv();
+      _getListPatient();
+      _getAnalytics();
+      return true;
+    }).catchError((onError) {
+      dev.log('cannot delete: $onError');
+      return false;
+    });
+  }
+
   Future<bool> insertPatient(
-      int noAvs,
-      String nom,
-      String prenom,
-      DateTime dateNaissance,
-      String rue,
-      String numeroRue,
-      String npa,
-      String ville,
-      String pays,
-      String nomPosteMedecinTraitant,
-      int idMedecinTraitant) async {
+      {required int noAvs,
+      required String nom,
+      required String prenom,
+      required DateTime dateNaissance,
+      required String rue,
+      required String numeroRue,
+      required String npa,
+      required String ville,
+      required String pays,
+      required String nomPosteMedecinTraitant,
+      required int idMedecinTraitant}) async {
     // dev.log('try update $id, with $newdate');
 
     return await _connection
@@ -70,6 +88,7 @@ class PostgresController extends GetxController {
       _getListPatient();
       return true;
     }).catchError((onError) {
+      dev.log('Error insert: $onError');
       return false;
     });
   }
@@ -135,23 +154,6 @@ class PostgresController extends GetxController {
     });
   }
 
-  Future<bool> deletePatient(int noAvs) async {
-    dev.log('Deleting patient noAvs : $noAvs');
-
-    return await _connection
-        .query(
-      " CALL delete_patient($noAvs')",
-    )
-        .then((value) {
-      _getListRdv();
-      _getListPatient();
-      _getAnalytics();
-      return true;
-    }).catchError((onError) {
-      return false;
-    });
-  }
-
   Future<List<List>> _getAnalytics() async {
     final result = await _connection.query("SELECT * FROM afficheranalytics");
 
@@ -163,8 +165,28 @@ class PostgresController extends GetxController {
     return result;
   }
 
+  Future<Employe> _getEmployee(int noAvs) async {
+    final result =
+        await _connection.query("SELECT * FROM get_employee($noAvs)");
+
+    // Obligatoirement qu'un row car noAvs clé primaire
+    final result2 = Employe(
+        nomService: result[0][0],
+        nomPoste: result[0][1],
+        prenom: result[0][2],
+        nom: result[0][3],
+        noAvs: result[0][4],
+        dateDeNaissance: result[0][5],
+        pourcentageTravail: result[0][6]);
+
+    dev.log('employee fetched: $result2');
+
+    return result2;
+  }
+
   Future<List<List>> _getEmployeService() async {
-    final result = await _connection.query(" SELECT * FROM afficherEmployeService");
+    final result =
+        await _connection.query(" SELECT * FROM afficherEmployeService");
     dev.log('services fetched: ${result.length}');
     _listEmployesService.value = result;
     return result;
@@ -184,17 +206,23 @@ class PostgresController extends GetxController {
           pourcentageTravail: result[i][1]);
     });
     _listEmployees.value = result2;
-    _listPersoMedical.value = _listEmployees.where((e) => e.nomService != 'Reception').toList();
-    _listMedecinGeneraliste.value =
-        _listEmployees.where((e) => e.nomPoste == 'Medecin generaliste').toList();
+    _listPersoMedical.value =
+        _listEmployees.where((e) => e.nomService != 'Reception').toList();
+    _listMedecinGeneraliste.value = _listEmployees
+        .where((e) => e.nomPoste == 'Medecin generaliste')
+        .toList();
 
-    _listCardiologue.value = _listPersoMedical.where((e) => e.nomPoste == 'Cardiologue').toList();
+    _listCardiologue.value =
+        _listPersoMedical.where((e) => e.nomPoste == 'Cardiologue').toList();
 
-    _listOncologue.value = _listPersoMedical.where((e) => e.nomPoste == 'Oncologue').toList();
+    _listOncologue.value =
+        _listPersoMedical.where((e) => e.nomPoste == 'Oncologue').toList();
 
-    _listUrologue.value = _listPersoMedical.where((e) => e.nomPoste == 'Urologue').toList();
+    _listUrologue.value =
+        _listPersoMedical.where((e) => e.nomPoste == 'Urologue').toList();
 
-    _listInfirmier.value = _listPersoMedical.where((e) => e.nomPoste == 'Infirmier').toList();
+    _listInfirmier.value =
+        _listPersoMedical.where((e) => e.nomPoste == 'Infirmier').toList();
 
     dev.log('doc généraliste fetched: ${_listMedecinGeneraliste.length}');
     dev.log('Cardiologue fetched: ${_listCardiologue.length}');
@@ -225,37 +253,21 @@ class PostgresController extends GetxController {
   Future<List<Rdv>> _getListRdv() async {
     final result = await _connection.query("SELECT * FROM afficherrdvpatient");
     dev.log('rdv fetched: ${result.length}');
-    final result2 = List.generate(result.length, (i) {
-      return Rdv(
-        id: result[i][0],
-        date: result[i][1],
-        prenomPatient: result[i][8],
-        nomPatient: result[i][7],
-        idPatient: result[i][2],
-        idMedecin: result[i][6],
-      );
-    });
 
-    _listRdv.value = result2;
-    return result2;
-  }
+    List<Rdv> lst = [];
+    for (var r in result) {
+      lst.add(Rdv(
+          id: r[0],
+          date: r[1],
+          prenomPatient: r[8],
+          nomPatient: r[7],
+          idPatient: r[2],
+          idMedecin: r[6],
+          employe: await _getEmployee(r[6])));
+    }
 
-  Future<Employe> _getEmployee(int noAvs) async {
-    final result = await _connection.query("SELECT * FROM get_employee($noAvs)");
-
-    //  dev.log('employee fetched: ${result.length}');
-
-    // Obligatoirement qu'un row car noAvs clé primaire
-    final result2 = Employe(
-        nomService: result[0][0],
-        nomPoste: result[0][1],
-        prenom: result[0][2],
-        nom: result[0][3],
-        noAvs: result[0][4],
-        dateDeNaissance: result[0][5],
-        pourcentageTravail: result[0][6]);
-
-    return result2;
+    _listRdv.value = lst;
+    return lst;
   }
 
   void _setSearchPath() async {

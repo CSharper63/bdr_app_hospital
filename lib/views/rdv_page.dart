@@ -44,7 +44,6 @@ class RdvPage extends GetView<PostgresController> {
                   itemCount: controller.listRdv.length,
                   itemBuilder: (_, int position) {
                     final rdv = controller.listRdv[position];
-
                     //get your rdv data here ...
                     return Card(
                       child: ListTile(
@@ -52,7 +51,7 @@ class RdvPage extends GetView<PostgresController> {
                         title: Text(
                             "Date : ${DateFormat('dd-MM-yyyy').format(rdv.date)} "),
                         subtitle: Text(
-                            "Patient : ${rdv.prenomPatient} ${rdv.nomPatient}"),
+                            "Patient : ${rdv.prenomPatient} ${rdv.nomPatient}\nMédecin : ${rdv.employe.prenom} ${rdv.employe.nom}"),
                         trailing: IconButton(
                           icon: const Icon(Icons.edit_rounded),
                           onPressed: () async {
