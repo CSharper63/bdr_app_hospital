@@ -1,5 +1,6 @@
 import 'dart:developer' as dev;
 
+import 'package:bdr_hospital_app/models/employe.dart';
 import 'package:bdr_hospital_app/models/patient.dart';
 import 'package:bdr_hospital_app/models/rdv.dart';
 import 'package:bdr_hospital_app/services/postgres_service.dart';
@@ -17,6 +18,7 @@ class PostgresController extends GetxController {
 
   final Rx<DbStatus> _dbStatus = Rx(DbStatus.undefined);
   final RxList<Patient> _listPatients = RxList();
+  final RxList<Employe> _listEmploye = RxList();
   final RxList<Rdv> _listRdv = RxList();
   final RxList<List> _listAnalytics = RxList();
   final RxList<List> _listEmployesService = RxList();
@@ -27,6 +29,7 @@ class PostgresController extends GetxController {
   List<List> get listEmployeService => _listEmployesService.value;
 
   List<Patient> get listPatients => _listPatients.value;
+  List<Employe> get listEmploye => _listEmploye.value;
 
   List<Rdv> get listRdv => _listRdv.value;
 
@@ -120,6 +123,25 @@ class PostgresController extends GetxController {
       );
     });
     _listPatients.value = result2;
+
+    return result2;
+  }
+
+  Future<List<Employe>> _getListEmploye() async {
+    final result = await _connection.query(" SELECT * FROM afficheremployes");
+    dev.log('patient fetched: ${result.length}');
+
+    final result2 = List.generate(result.length, (i) {
+      return Employe(
+        nomService: result[i][9],
+        nomPoste: result[i][10],
+        prenom: result[i][2],
+        nom: result[i][1],
+        noAvs: result[i][0],
+        dateDeNaissance: result[i][3],
+      );
+    });
+    _listEmploye.value = result2;
 
     return result2;
   }
