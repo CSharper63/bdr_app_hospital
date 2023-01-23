@@ -3,7 +3,7 @@ class Employe {
   String nomPoste;
   String prenom;
   String nom;
-  String noAvs;
+  int noAvs;
   DateTime dateDeNaissance;
 
   Employe({

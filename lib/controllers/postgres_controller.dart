@@ -18,7 +18,7 @@ class PostgresController extends GetxController {
 
   final Rx<DbStatus> _dbStatus = Rx(DbStatus.undefined);
   final RxList<Patient> _listPatients = RxList();
-  final RxList<Employe> _listEmploye = RxList();
+  final RxList<Employe> _listEmployees = RxList();
   final RxList<Rdv> _listRdv = RxList();
   final RxList<List> _listAnalytics = RxList();
   final RxList<List> _listEmployesService = RxList();
@@ -26,10 +26,10 @@ class PostgresController extends GetxController {
   PostgreSQLConnection get db => _connection;
   DbStatus get dbStatus => _dbStatus.value;
   List<List> get listAnalytics => _listAnalytics.value;
-  List<List> get listEmployeService => _listEmployesService.value;
+  List<Employe> get listEmploye => _listEmployees.value;
 
+  List<List> get listEmployeService => _listEmployesService.value;
   List<Patient> get listPatients => _listPatients.value;
-  List<Employe> get listEmploye => _listEmploye.value;
 
   List<Rdv> get listRdv => _listRdv.value;
 
@@ -40,6 +40,8 @@ class PostgresController extends GetxController {
     dev.log('PostgresController onInit');
     _connection.open().then((_) {
       dev.log('Connection success');
+      _dbStatus.value = DbStatus.connected;
+
       _setSearchPath();
 
       // our queries
@@ -47,7 +49,7 @@ class PostgresController extends GetxController {
       _getListPatient();
       _getListRdv();
       _getEmployeService();
-      _dbStatus.value = DbStatus.connected;
+      _getListEmployees();
     }).catchError((onError) {
       dev.log('Error: $onError');
       _dbStatus.value = DbStatus.unreachable;
@@ -58,14 +60,14 @@ class PostgresController extends GetxController {
       switch (_dbStatus.value) {
         case DbStatus.unreachable:
           Get.showSnackbar(const GetSnackBar(
-            message: 'Impossible de se connecter à la base de donnée',
+            message: 'Impossible de se connecter à la base de données',
             duration: Duration(seconds: 2),
             backgroundColor: Colors.red,
           ));
           break;
         case DbStatus.connected:
           Get.showSnackbar(const GetSnackBar(
-            message: 'Base de donnée connectée !',
+            message: 'Base de données connectée !',
             duration: Duration(seconds: 2),
             backgroundColor: Colors.green,
           ));
@@ -111,6 +113,25 @@ class PostgresController extends GetxController {
     return result;
   }
 
+  Future<List<Employe>> _getListEmployees() async {
+    final result = await _connection.query(" SELECT * FROM afficheremployes");
+    dev.log('employees fetched: ${result.length}');
+
+    final result2 = List.generate(result.length, (i) {
+      return Employe(
+        nomService: result[i][9],
+        nomPoste: result[i][10],
+        prenom: result[i][2],
+        nom: result[i][1],
+        noAvs: result[i][0],
+        dateDeNaissance: result[i][3],
+      );
+    });
+    _listEmployees.value = result2;
+
+    return result2;
+  }
+
   Future<List<Patient>> _getListPatient() async {
     final result = await _connection.query(" SELECT * FROM afficherpatient");
     dev.log('patient fetched: ${result.length}');
@@ -123,25 +144,6 @@ class PostgresController extends GetxController {
       );
     });
     _listPatients.value = result2;
-
-    return result2;
-  }
-
-  Future<List<Employe>> _getListEmploye() async {
-    final result = await _connection.query(" SELECT * FROM afficheremployes");
-    dev.log('patient fetched: ${result.length}');
-
-    final result2 = List.generate(result.length, (i) {
-      return Employe(
-        nomService: result[i][9],
-        nomPoste: result[i][10],
-        prenom: result[i][2],
-        nom: result[i][1],
-        noAvs: result[i][0],
-        dateDeNaissance: result[i][3],
-      );
-    });
-    _listEmploye.value = result2;
 
     return result2;
   }
