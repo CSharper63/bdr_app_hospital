@@ -8,8 +8,7 @@ class AnalyticsPage extends GetView<PostgresController> {
 
   @override
   Widget build(BuildContext context) {
-    const TextStyle txtStyle =
-        TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
+    const TextStyle txtStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
     return Scaffold(
         appBar: AppBar(title: const Text('Analytics')),
         body: Obx(() => controller.dbStatus == DbStatus.connected
@@ -52,16 +51,11 @@ class AnalyticsPage extends GetView<PostgresController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Obx(() =>
-                            Text("${controller.listEmployeesService[0]}")),
-                        Obx(() =>
-                            Text("${controller.listEmployeesService[1]}")),
-                        Obx(() =>
-                            Text("${controller.listEmployeesService[2]}")),
-                        Obx(() =>
-                            Text("${controller.listEmployeesService[3]}")),
-                        Obx(() =>
-                            Text("${controller.listEmployeesService[4]}")),
+                        Obx(() => Text("${controller.listEmployeesService[0]}")),
+                        Obx(() => Text("${controller.listEmployeesService[1]}")),
+                        Obx(() => Text("${controller.listEmployeesService[2]}")),
+                        Obx(() => Text("${controller.listEmployeesService[3]}")),
+                        Obx(() => Text("${controller.listEmployeesService[4]}")),
                       ],
                     )),
                 Container(
@@ -75,15 +69,14 @@ class AnalyticsPage extends GetView<PostgresController> {
                           shrinkWrap: true,
                           itemCount: controller.listMedecinGeneraliste.length,
                           itemBuilder: (_, int position) {
-                            final Employe doc =
-                                controller.listMedecinGeneraliste[position];
+                            final Employe doc = controller.listMedecinGeneraliste[position];
                             //get your item data here ...
                             return Card(
                               child: ListTile(
-                                leading:
-                                    const Icon(Icons.health_and_safety_rounded),
+                                leading: const Icon(Icons.health_and_safety_rounded),
                                 title: Text("${doc.prenom} ${doc.nom}"),
-                                subtitle: const Text("TODO % travail"),
+                                subtitle:
+                                    Text("Taux de travail : ${doc.pourcentageTravail * 100}%"),
                               ),
                             );
                           },
@@ -99,15 +92,14 @@ class AnalyticsPage extends GetView<PostgresController> {
                           shrinkWrap: true,
                           itemCount: controller.listUrologue.length,
                           itemBuilder: (_, int position) {
-                            final Employe doc =
-                                controller.listUrologue[position];
+                            final Employe doc = controller.listUrologue[position];
                             //get your item data here ...
                             return Card(
                               child: ListTile(
-                                leading:
-                                    const Icon(Icons.health_and_safety_rounded),
+                                leading: const Icon(Icons.health_and_safety_rounded),
                                 title: Text("${doc.prenom} ${doc.nom}"),
-                                subtitle: const Text("TODO % travail"),
+                                subtitle:
+                                    Text("Taux de travail : ${doc.pourcentageTravail * 100}%"),
                               ),
                             );
                           },
@@ -126,15 +118,14 @@ class AnalyticsPage extends GetView<PostgresController> {
                           shrinkWrap: true,
                           itemCount: controller.listOncologue.length,
                           itemBuilder: (_, int position) {
-                            final Employe doc =
-                                controller.listOncologue[position];
+                            final Employe doc = controller.listOncologue[position];
                             //get your item data here ...
                             return Card(
                               child: ListTile(
-                                leading:
-                                    const Icon(Icons.health_and_safety_rounded),
+                                leading: const Icon(Icons.health_and_safety_rounded),
                                 title: Text("${doc.prenom} ${doc.nom}"),
-                                subtitle: const Text("TODO % travail"),
+                                subtitle:
+                                    Text("Taux de travail : ${doc.pourcentageTravail * 100}%"),
                               ),
                             );
                           },
@@ -150,15 +141,14 @@ class AnalyticsPage extends GetView<PostgresController> {
                           shrinkWrap: true,
                           itemCount: controller.listInfirmier.length,
                           itemBuilder: (_, int position) {
-                            final Employe doc =
-                                controller.listInfirmier[position];
+                            final Employe doc = controller.listInfirmier[position];
                             //get your item data here ...
                             return Card(
                               child: ListTile(
-                                leading:
-                                    const Icon(Icons.health_and_safety_rounded),
+                                leading: const Icon(Icons.health_and_safety_rounded),
                                 title: Text("${doc.prenom} ${doc.nom}"),
-                                subtitle: const Text("TODO % travail"),
+                                subtitle:
+                                    Text("Taux de travail : ${doc.pourcentageTravail * 100}%"),
                               ),
                             );
                           },

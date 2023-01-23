@@ -5,6 +5,7 @@ class Employe {
   String nom;
   int noAvs;
   DateTime dateDeNaissance;
+  double pourcentageTravail;
 
   Employe({
     required this.nomService,
@@ -13,5 +14,6 @@ class Employe {
     required this.nom,
     required this.noAvs,
     required this.dateDeNaissance,
+    required this.pourcentageTravail,
   });
 }

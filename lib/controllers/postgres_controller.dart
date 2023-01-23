@@ -174,32 +174,26 @@ class PostgresController extends GetxController {
 
     final result2 = List.generate(result.length, (i) {
       return Employe(
-        nomService: result[i][10],
-        nomPoste: result[i][11],
-        prenom: result[i][3],
-        nom: result[i][2],
-        noAvs: result[i][0],
-        dateDeNaissance: result[i][4],
-      );
+          nomService: result[i][10],
+          nomPoste: result[i][11],
+          prenom: result[i][3],
+          nom: result[i][2],
+          noAvs: result[i][0],
+          dateDeNaissance: result[i][4],
+          pourcentageTravail: result[i][1]);
     });
     _listEmployees.value = result2;
-    _listPersoMedical.value =
-        _listEmployees.where((e) => e.nomService != 'Reception').toList();
-    _listMedecinGeneraliste.value = _listEmployees
-        .where((e) => e.nomPoste == 'Medecin generaliste')
-        .toList();
+    _listPersoMedical.value = _listEmployees.where((e) => e.nomService != 'Reception').toList();
+    _listMedecinGeneraliste.value =
+        _listEmployees.where((e) => e.nomPoste == 'Medecin generaliste').toList();
 
-    _listCardiologue.value =
-        _listPersoMedical.where((e) => e.nomPoste == 'Cardiologue').toList();
+    _listCardiologue.value = _listPersoMedical.where((e) => e.nomPoste == 'Cardiologue').toList();
 
-    _listOncologue.value =
-        _listPersoMedical.where((e) => e.nomPoste == 'Oncologue').toList();
+    _listOncologue.value = _listPersoMedical.where((e) => e.nomPoste == 'Oncologue').toList();
 
-    _listUrologue.value =
-        _listPersoMedical.where((e) => e.nomPoste == 'Urologue').toList();
+    _listUrologue.value = _listPersoMedical.where((e) => e.nomPoste == 'Urologue').toList();
 
-    _listInfirmier.value =
-        _listPersoMedical.where((e) => e.nomPoste == 'Infirmier').toList();
+    _listInfirmier.value = _listPersoMedical.where((e) => e.nomPoste == 'Infirmier').toList();
 
     dev.log('doc généraliste fetched: ${_listMedecinGeneraliste.length}');
     dev.log('Cardiologue fetched: ${_listCardiologue.length}');
@@ -241,6 +235,24 @@ class PostgresController extends GetxController {
     });
 
     _listRdv.value = result2;
+    return result2;
+  }
+
+  Future<Employe> _getEmployee(int noAvs) async {
+    final result = await _connection.query("SELECT * FROM get_employee($noAvs)");
+
+    //  dev.log('employee fetched: ${result.length}');
+
+    // Obligatoirement qu'un row car noAvs clé primaire
+    final result2 = Employe(
+        nomService: result[0][0],
+        nomPoste: result[0][1],
+        prenom: result[0][2],
+        nom: result[0][3],
+        noAvs: result[0][4],
+        dateDeNaissance: result[0][5],
+        pourcentageTravail: result[0][6]);
+
     return result2;
   }
 
