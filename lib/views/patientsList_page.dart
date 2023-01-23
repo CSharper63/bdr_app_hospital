@@ -89,6 +89,13 @@ class PatientListPage extends GetView<PostgresController> {
                     //get your item data here ...
                     return Card(
                       child: ListTile(
+                        trailing: IconButton(
+                          icon: const Icon(
+                            Icons.delete_forever_rounded,
+                            color: Color.fromARGB(255, 212, 16, 16),
+                          ),
+                          onPressed: () {},
+                        ),
                         leading: const Icon(Icons.person_rounded),
                         title: Text("${patient.prenom} ${patient.nom}"),
                         subtitle: Text(

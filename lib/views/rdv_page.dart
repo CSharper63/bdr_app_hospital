@@ -53,63 +53,66 @@ class RdvPage extends GetView<PostgresController> {
                             "Date : ${DateFormat('dd-MM-yyyy').format(rdv.date)} "),
                         subtitle: Text(
                             "Patient : ${rdv.prenomPatient} ${rdv.nomPatient}"),
-                        trailing: const Icon(Icons.edit_rounded),
-                        onTap: () async {
-                          Get.defaultDialog(
-                              title: "Mise à jour",
-                              content: Container(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Column(
-                                    children: [
-                                      const Text(
-                                          'Veuillez choisir une nouvelle date de rendez-vous'),
-                                      DateTimePicker(
-                                        type: DateTimePickerType.date,
-                                        initialValue: '',
-                                        firstDate: DateTime(2000),
-                                        lastDate: DateTime(2100),
-                                        dateLabelText:
-                                            'Choisir une nouvelle date',
-                                        onChanged: (val) {
-                                          _newToUpate = val;
-                                          _canUpdate.value = true;
-                                        },
-                                        validator: (val) {
-                                          _newToUpate = val ?? '';
-                                          return null;
-                                        },
-                                        onSaved: (val) => print(val),
-                                      ),
-                                      Obx(() => IconButton(
-                                          onPressed: _canUpdate.value
-                                              ? () async {
-                                                  bool updated =
-                                                      await controller
-                                                          .updateRdv(rdv.id,
-                                                              _newToUpate);
+                        trailing: IconButton(
+                          icon: const Icon(Icons.edit_rounded),
+                          onPressed: () async {
+                            Get.defaultDialog(
+                                title: "Mise à jour",
+                                content: Container(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Column(
+                                      children: [
+                                        const Text(
+                                            'Veuillez choisir une nouvelle date de rendez-vous'),
+                                        DateTimePicker(
+                                          type: DateTimePickerType.date,
+                                          initialValue: '',
+                                          firstDate: DateTime(2000),
+                                          lastDate: DateTime(2100),
+                                          dateLabelText:
+                                              'Choisir une nouvelle date',
+                                          onChanged: (val) {
+                                            _newToUpate = val;
+                                            _canUpdate.value = true;
+                                          },
+                                          validator: (val) {
+                                            _newToUpate = val ?? '';
+                                            return null;
+                                          },
+                                          onSaved: (val) => print(val),
+                                        ),
+                                        Obx(() => IconButton(
+                                            onPressed: _canUpdate.value
+                                                ? () async {
+                                                    bool updated =
+                                                        await controller
+                                                            .updateRdv(rdv.id,
+                                                                _newToUpate);
 
-                                                  if (updated) {
-                                                    Get.back(
-                                                        closeOverlays: true);
-                                                    Get.showSnackbar(
-                                                        GetSnackBar(
-                                                      message:
-                                                          "Rendez-vous ${rdv.id} mis à jour !",
-                                                      duration: const Duration(
-                                                          seconds: 1),
-                                                    ));
-                                                    _canUpdate.value = false;
-                                                  } else {
-                                                    Get.back(
-                                                        closeOverlays: true);
+                                                    if (updated) {
+                                                      Get.back(
+                                                          closeOverlays: true);
+                                                      Get.showSnackbar(
+                                                          GetSnackBar(
+                                                        message:
+                                                            "Rendez-vous ${rdv.id} mis à jour !",
+                                                        duration:
+                                                            const Duration(
+                                                                seconds: 1),
+                                                      ));
+                                                      _canUpdate.value = false;
+                                                    } else {
+                                                      Get.back(
+                                                          closeOverlays: true);
+                                                    }
                                                   }
-                                                }
-                                              : null,
-                                          icon:
-                                              const Icon(Icons.check_rounded)))
-                                    ],
-                                  )));
-                        },
+                                                : null,
+                                            icon: const Icon(
+                                                Icons.check_rounded)))
+                                      ],
+                                    )));
+                          },
+                        ),
                       ),
                     );
                   },
