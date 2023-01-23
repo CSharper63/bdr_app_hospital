@@ -41,11 +41,11 @@ class PostgresController extends GetxController {
   List<Employe> get listInfirmier => _listInfirmier.value;
   List<Employe> get listMedecinGeneraliste => _listMedecinGeneraliste.value;
   List<Employe> get listOncologue => _listOncologue.value;
-  List<Patient> get listPatients => _listPatients.value;
+  List<Operation> get listOperation => _listOperation.value;
 
+  List<Patient> get listPatients => _listPatients.value;
   List<Employe> get listPersoMedical => _listPersoMedical.value;
   List<Rdv> get listRdv => _listRdv.value;
-  List<Operation> get listOperation => _listOperation.value;
 
   List<Employe> get listUrologue => _listUrologue.value;
 
@@ -173,7 +173,8 @@ class PostgresController extends GetxController {
   }
 
   Future<Employe> _getEmployee(int noAvs) async {
-    final result = await _connection.query("SELECT * FROM get_employee($noAvs)");
+    final result =
+        await _connection.query("SELECT * FROM get_employee($noAvs)");
 
     // Obligatoirement qu'un row car noAvs clé primaire
     final result2 = Employe(
@@ -191,7 +192,8 @@ class PostgresController extends GetxController {
   }
 
   Future<List<List>> _getEmployeService() async {
-    final result = await _connection.query(" SELECT * FROM afficherEmployeService");
+    final result =
+        await _connection.query(" SELECT * FROM afficherEmployeService");
     dev.log('services fetched: ${result.length}');
     _listEmployesService.value = result;
     return result;
@@ -199,29 +201,36 @@ class PostgresController extends GetxController {
 
   Future<List<Employe>> _getListEmployees() async {
     final result = await _connection.query("SELECT * FROM afficheremployes");
+    List<Employe> lst = [];
+    for (var r in result) {
+      lst.add(Employe(
+          nomService: r[10],
+          nomPoste: r[11],
+          prenom: r[3],
+          nom: r[2],
+          noAvs: r[0],
+          dateDeNaissance: r[4],
+          pourcentageTravail: r[1]));
+    }
 
-    final result2 = List.generate(result.length, (i) {
-      return Employe(
-          nomService: result[i][10],
-          nomPoste: result[i][11],
-          prenom: result[i][3],
-          nom: result[i][2],
-          noAvs: result[i][0],
-          dateDeNaissance: result[i][4],
-          pourcentageTravail: result[i][1]);
-    });
-    _listEmployees.value = result2;
-    _listPersoMedical.value = _listEmployees.where((e) => e.nomService != 'Reception').toList();
-    _listMedecinGeneraliste.value =
-        _listEmployees.where((e) => e.nomPoste == 'Medecin generaliste').toList();
+    _listEmployees.value = lst;
+    _listPersoMedical.value =
+        _listEmployees.where((e) => e.nomService != 'Reception').toList();
+    _listMedecinGeneraliste.value = _listEmployees
+        .where((e) => e.nomPoste == 'Medecin generaliste')
+        .toList();
 
-    _listCardiologue.value = _listPersoMedical.where((e) => e.nomPoste == 'Cardiologue').toList();
+    _listCardiologue.value =
+        _listPersoMedical.where((e) => e.nomPoste == 'Cardiologue').toList();
 
-    _listOncologue.value = _listPersoMedical.where((e) => e.nomPoste == 'Oncologue').toList();
+    _listOncologue.value =
+        _listPersoMedical.where((e) => e.nomPoste == 'Oncologue').toList();
 
-    _listUrologue.value = _listPersoMedical.where((e) => e.nomPoste == 'Urologue').toList();
+    _listUrologue.value =
+        _listPersoMedical.where((e) => e.nomPoste == 'Urologue').toList();
 
-    _listInfirmier.value = _listPersoMedical.where((e) => e.nomPoste == 'Infirmier').toList();
+    _listInfirmier.value =
+        _listPersoMedical.where((e) => e.nomPoste == 'Infirmier').toList();
 
     dev.log('doc généraliste fetched: ${_listMedecinGeneraliste.length}');
     dev.log('Cardiologue fetched: ${_listCardiologue.length}');
@@ -229,43 +238,6 @@ class PostgresController extends GetxController {
     dev.log('Urologue fetched: ${_listUrologue.length}');
     dev.log('Infirmier fetched: ${_listInfirmier.length}');
 
-    return result2;
-  }
-
-  Future<List<Patient>> _getListPatient() async {
-    final result = await _connection.query("SELECT * FROM afficherpatient");
-    dev.log('patient fetched: ${result.length}');
-
-    final result2 = List.generate(result.length, (i) {
-      return Patient(
-        noAvs: result[i][0],
-        dateDeNaissance: result[i][5],
-        nom: result[i][3],
-        prenom: result[i][4],
-      );
-    });
-    _listPatients.value = result2;
-
-    return result2;
-  }
-
-  Future<List<Rdv>> _getListRdv() async {
-    final result = await _connection.query("SELECT * FROM afficherrdvpatient");
-    dev.log('rdv fetched: ${result.length}');
-
-    List<Rdv> lst = [];
-    for (var r in result) {
-      lst.add(Rdv(
-          id: r[0],
-          date: r[1],
-          prenomPatient: r[8],
-          nomPatient: r[7],
-          idPatient: r[2],
-          idMedecin: r[6],
-          employe: await _getEmployee(r[6])));
-    }
-
-    _listRdv.value = lst;
     return lst;
   }
 
@@ -290,6 +262,45 @@ class PostgresController extends GetxController {
     }
 
     _listOperation.value = lst;
+    return lst;
+  }
+
+  Future<List<Patient>> _getListPatient() async {
+    final result = await _connection.query("SELECT * FROM afficherpatient");
+    dev.log('patient fetched: ${result.length}');
+
+    List<Patient> lst = [];
+    for (var r in result) {
+      lst.add(Patient(
+        noAvs: r[0],
+        dateDeNaissance: r[5],
+        nom: r[3],
+        prenom: r[4],
+      ));
+    }
+
+    _listPatients.value = lst;
+
+    return lst;
+  }
+
+  Future<List<Rdv>> _getListRdv() async {
+    final result = await _connection.query("SELECT * FROM afficherrdvpatient");
+    dev.log('rdv fetched: ${result.length}');
+
+    List<Rdv> lst = [];
+    for (var r in result) {
+      lst.add(Rdv(
+          id: r[0],
+          date: r[1],
+          prenomPatient: r[8],
+          nomPatient: r[7],
+          idPatient: r[2],
+          idMedecin: r[6],
+          employe: await _getEmployee(r[6])));
+    }
+
+    _listRdv.value = lst;
     return lst;
   }
 
