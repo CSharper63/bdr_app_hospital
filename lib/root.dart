@@ -20,9 +20,12 @@ class Root extends GetView<NavigationController> {
                   icon: Icon(Icons.medical_information_rounded),
                   label: 'Liste des patients'),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.numbers), label: 'Analytics'),
+                  icon: Icon(Icons.add_chart_rounded), label: 'Analytics'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.person_rounded), label: 'Profile médecin')
             ],
             currentIndex: controller.selectedIndex,
+            unselectedItemColor: Colors.teal,
             selectedItemColor: Colors.blue,
             onTap: (int idx) {
               controller.setIndex = idx;

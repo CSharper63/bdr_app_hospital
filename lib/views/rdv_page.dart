@@ -19,19 +19,16 @@ class RdvPage extends GetView<PostgresController> {
         body: Obx(() => ListView.builder(
               itemCount: controller.listRdv.length,
               itemBuilder: (_, int position) {
-                final item = controller.listRdv[position];
-                final id = item[0];
-                final date = item[1];
-                final prenomPatient = item[8];
-                final nomPatient = item[7];
-                final idPatient = item[2];
+                final rdv = controller.listRdv[position];
 
-                //get your item data here ...
+                //get your rdv data here ...
                 return Card(
                   child: ListTile(
-                    title: Text("Identifiant :  $id"),
+                    leading: const Icon(Icons.calendar_month_rounded),
+                    title: Text(
+                        "Date : ${DateFormat('dd-MM-yyyy').format(rdv.date)} "),
                     subtitle: Text(
-                        "Date : ${DateFormat('dd-MM-yyyy').format(date)}  \nPatient : $prenomPatient $nomPatient"),
+                        "Patient : ${rdv.prenomPatient} ${rdv.nomPatient}"),
                     trailing: const Icon(Icons.edit_rounded),
                     onTap: () async {
                       Get.defaultDialog(
@@ -47,7 +44,7 @@ class RdvPage extends GetView<PostgresController> {
                                     initialValue: '',
                                     firstDate: DateTime(2000),
                                     lastDate: DateTime(2100),
-                                    dateLabelText: 'Date',
+                                    dateLabelText: 'Choisir une nouvelle date',
                                     onChanged: (val) {
                                       _newToUpate = val;
                                       _canUpdate.value = true;
@@ -63,23 +60,23 @@ class RdvPage extends GetView<PostgresController> {
                                           ? () async {
                                               bool updated =
                                                   await controller.updateRdv(
-                                                      idPatient, _newToUpate);
+                                                      rdv.id, _newToUpate);
 
                                               if (updated) {
                                                 Get.back(closeOverlays: true);
-                                                Get.showSnackbar(
-                                                    const GetSnackBar(
+                                                Get.showSnackbar(GetSnackBar(
                                                   message:
-                                                      "Rendez-vous mis à jour !",
-                                                  duration:
-                                                      Duration(seconds: 1),
+                                                      "Rendez-vous ${rdv.id} mis à jour !",
+                                                  duration: const Duration(
+                                                      seconds: 1),
                                                 ));
+                                                _canUpdate.value = false;
                                               } else {
                                                 Get.back(closeOverlays: true);
                                               }
                                             }
                                           : null,
-                                      icon: const Icon(Icons.add_rounded)))
+                                      icon: const Icon(Icons.check_rounded)))
                                 ],
                               )));
                     },
