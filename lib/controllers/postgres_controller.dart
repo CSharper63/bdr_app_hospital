@@ -1,6 +1,7 @@
 import 'dart:developer' as dev;
 
 import 'package:bdr_hospital_app/models/employe.dart';
+import 'package:bdr_hospital_app/models/employeService.dart';
 import 'package:bdr_hospital_app/models/operation.dart';
 import 'package:bdr_hospital_app/models/patient.dart';
 import 'package:bdr_hospital_app/models/rdv.dart';
@@ -30,14 +31,14 @@ class PostgresController extends GetxController {
   final RxList<Rdv> _listRdv = RxList();
   final RxList<Operation> _listOperation = RxList();
   final RxList<List> _listAnalytics = RxList();
-  final RxList<List> _listEmployesService = RxList();
+  final RxList<EmployeService> _listEmployesService = RxList();
 
   PostgreSQLConnection get db => _connection;
   DbStatus get dbStatus => _dbStatus.value;
   List<List> get listAnalytics => _listAnalytics.value;
   List<Employe> get listCardiologue => _listCardiologue.value;
   List<Employe> get listEmployees => _listEmployees.value;
-  List<List> get listEmployeesService => _listEmployesService.value;
+  List<EmployeService> get listEmployeesService => _listEmployesService.value;
   List<Employe> get listInfirmier => _listInfirmier.value;
   List<Employe> get listMedecinGeneraliste => _listMedecinGeneraliste.value;
   List<Employe> get listOncologue => _listOncologue.value;
@@ -163,7 +164,6 @@ class PostgresController extends GetxController {
 
   Future<List<List>> _getAnalytics() async {
     final result = await _connection.query("SELECT * FROM afficheranalytics");
-
     dev.log('analytics fetched: ${result.length}');
 
     dev.log('result: $result');
@@ -190,11 +190,17 @@ class PostgresController extends GetxController {
     return result2;
   }
 
-  Future<List<List>> _getEmployeService() async {
+  Future<List<EmployeService>> _getEmployeService() async {
     final result = await _connection.query(" SELECT * FROM afficherEmployeService");
     dev.log('services fetched: ${result.length}');
-    _listEmployesService.value = result;
-    return result;
+
+    List<EmployeService> lst = [];
+    for (var r in result) {
+      lst.add(EmployeService(nomService: r[0], nbEmploye: r[1]));
+    }
+    _listEmployesService.value = lst;
+
+    return lst;
   }
 
   Future<List<Employe>> _getListEmployees() async {
