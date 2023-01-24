@@ -162,7 +162,12 @@ class AddPatientPage extends GetView<PostgresController> {
                       );
 
                       if (inserted) {
-                        print('INSERTEDDDDDDDDDDDDDDDDD');
+                        Get.back(closeOverlays: true);
+                        Get.showSnackbar(const GetSnackBar(
+                          message: 'Patient ajouté avec succès',
+                          duration: Duration(seconds: 1),
+                          backgroundColor: Colors.blue,
+                        ));
                       }
                     },
                     icon: const Icon(Icons.add_rounded)),

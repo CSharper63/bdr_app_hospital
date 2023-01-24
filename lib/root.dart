@@ -22,7 +22,7 @@ class Root extends GetView<NavigationController> {
               BottomNavigationBarItem(
                   icon: Icon(Icons.add_chart_rounded), label: 'Analytics'),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.person_rounded), label: 'Profile médecin')
+                  icon: Icon(Icons.local_hospital_rounded), label: 'Opérations')
             ],
             currentIndex: controller.selectedIndex,
             unselectedItemColor: Colors.teal,
