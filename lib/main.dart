@@ -41,6 +41,9 @@ class Splash extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: const [
               Text('Tentative de connextion à la base de données'),
+              SizedBox(
+                height: 10,
+              ),
               CircularProgressIndicator()
             ]),
       ),

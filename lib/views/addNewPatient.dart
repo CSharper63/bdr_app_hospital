@@ -56,8 +56,8 @@ class AddPatientPage extends GetView<PostgresController> {
                             type: DateTimePickerType.date,
                             icon: const Icon(Icons.cake_rounded),
                             initialValue: '',
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2100),
+                            firstDate: DateTime(1900),
+                            lastDate: DateTime.now(),
                             dateLabelText: 'Date de naissance',
                             onChanged: (val) {
                               birthDate = val;

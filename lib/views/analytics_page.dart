@@ -50,13 +50,13 @@ class AnalyticsPage extends GetView<PostgresController> {
                             print(service);
                             //get your item data here ...
                             return Text(
-                                "${service.nomService} ${service.nbEmploye}");
+                                "${service.nomService} : ${service.nbEmploye}");
                           },
                         ))),
                 Container(
                     padding: EdgeInsets.all(paddingTitle),
                     child: Text(
-                        'Médecins généralistes ${controller.listMedecinGeneraliste.length}',
+                        'Médecins généralistes : ${controller.listMedecinGeneraliste.length}',
                         style: txtStyle)),
                 Container(
                     padding: EdgeInsets.all(paddingTitle),
@@ -84,7 +84,7 @@ class AnalyticsPage extends GetView<PostgresController> {
                         ))),
                 Container(
                     padding: EdgeInsets.all(paddingTitle),
-                    child: Text('Urologues ${controller.listUrologue.length}',
+                    child: Text('Urologues : ${controller.listUrologue.length}',
                         style: txtStyle)),
                 Container(
                     padding: EdgeInsets.all(paddingTitle),
@@ -113,7 +113,7 @@ class AnalyticsPage extends GetView<PostgresController> {
                 Container(
                     padding: EdgeInsets.all(paddingTitle),
                     child: Text(
-                      'Oncologues ${controller.listOncologue.length}',
+                      'Oncologues : ${controller.listOncologue.length}',
                       style: txtStyle,
                     )),
                 Container(
@@ -142,7 +142,8 @@ class AnalyticsPage extends GetView<PostgresController> {
                         ))),
                 Container(
                     padding: EdgeInsets.all(paddingTitle),
-                    child: Text('Infirmiers ${controller.listInfirmier.length}',
+                    child: Text(
+                        'Infirmiers : ${controller.listInfirmier.length}',
                         style: txtStyle)),
                 Container(
                     padding: EdgeInsets.all(paddingTitle),
