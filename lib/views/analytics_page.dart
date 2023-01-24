@@ -1,5 +1,6 @@
 import 'package:bdr_hospital_app/controllers/postgres_controller.dart';
 import 'package:bdr_hospital_app/models/employe.dart';
+import 'package:bdr_hospital_app/models/employeService.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -49,22 +50,26 @@ class AnalyticsPage extends GetView<PostgresController> {
                 ),
                 Container(
                     padding: const EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Obx(() =>
-                            Text("${controller.listEmployeesService[0]}")),
-                        Obx(() =>
-                            Text("${controller.listEmployeesService[1]}")),
-                        Obx(() =>
-                            Text("${controller.listEmployeesService[2]}")),
-                        Obx(() =>
-                            Text("${controller.listEmployeesService[3]}")),
-                        Obx(() =>
-                            Text("${controller.listEmployeesService[4]}")),
-                      ],
-                    )),
+                    child: Obx(() => ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: controller.listEmployeesService.length,
+                          itemBuilder: (_, int position) {
+                            final EmployeService service =
+                                controller.listEmployeesService[position];
+                            print(service);
+                            //get your item data here ...
+                            return ListTile(
+                              leading: const Icon(
+                                FontAwesomeIcons.userDoctor,
+                                size: 20,
+                              ),
+                              title: Text(
+                                  "${service.nomService} ${service.nbEmploye}"),
+                            );
+                          },
+                        ))),
                 Container(
                     padding: const EdgeInsets.all(5),
                     child: Text(

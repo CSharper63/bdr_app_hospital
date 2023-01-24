@@ -146,8 +146,6 @@ class PostgresController extends GetxController {
   }
 
   Future<bool> updateRdv(int id, String newdate) async {
-    dev.log('try update $id, with $newdate');
-
     return await _connection
         .query(
       " CALL update_rdv($id, '$newdate')",
@@ -192,7 +190,8 @@ class PostgresController extends GetxController {
   }
 
   Future<List<EmployeService>> _getEmployeService() async {
-    final result = await _connection.query(" SELECT * FROM afficherEmployeService");
+    final result =
+        await _connection.query("SELECT * FROM afficherEmployeService");
     dev.log('services fetched: ${result.length}');
 
     List<EmployeService> lst = [];
@@ -200,6 +199,7 @@ class PostgresController extends GetxController {
       lst.add(EmployeService(nomService: r[0], nbEmploye: r[1]));
     }
     _listEmployesService.value = lst;
+    dev.log('services fetched: ${lst.length}');
 
     return lst;
   }
