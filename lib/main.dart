@@ -35,9 +35,14 @@ class Splash extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: CircularProgressIndicator(),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Text('Tentative de connextion à la base de données'),
+              CircularProgressIndicator()
+            ]),
       ),
     );
   }

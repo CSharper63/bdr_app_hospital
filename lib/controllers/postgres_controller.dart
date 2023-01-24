@@ -220,7 +220,7 @@ class PostgresController extends GetxController {
 
     _listEmployees.value = lst;
     _listPersoMedical.value =
-        _listEmployees.where((e) => e.nomService != 'Reception').toList();
+        _listEmployees.where((e) => e.nomService != 'Réception').toList();
     _listMedecinGeneraliste.value = _listEmployees
         .where((e) => e.nomPoste == 'Médecin généraliste')
         .toList();

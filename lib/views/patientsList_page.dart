@@ -24,7 +24,9 @@ class PatientListPage extends GetView<PostgresController> {
             onPressed: () {
               Get.to(() => const AddPatientPage());
             }),
-        appBar: AppBar(title: const Text('Liste des patients')),
+        appBar: AppBar(
+            title: Obx(() =>
+                Text('Liste des patients ${controller.listPatients.length}'))),
         body: Obx(() => controller.dbStatus == DbStatus.connected
             ? Obx(() => ListView.builder(
                   itemCount: controller.listPatients.length,

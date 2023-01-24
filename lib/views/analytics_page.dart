@@ -10,6 +10,7 @@ class AnalyticsPage extends GetView<PostgresController> {
 
   @override
   Widget build(BuildContext context) {
+    double paddingTitle = 10;
     const TextStyle txtStyle =
         TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
     return Scaffold(
@@ -20,35 +21,23 @@ class AnalyticsPage extends GetView<PostgresController> {
                       child: ListTile(
                         title: Text(
                             "Nombre de rendez-vous reprogrammés : ${controller.listAnalytics[0][0]}"),
-
-                        /* subtitle: Text(
-                          "${"Date : " + DateFormat('dd-MM-yyyy').format(item[1]) + "\nNom du patient : " + item[8]} " +
-                              item[7]) */
                       ),
                     )),
                 Obx(() => Card(
                       child: ListTile(
                           title: Text(
-                              "Nombre d'opérations reprogrammés : ${controller.listAnalytics[0][1]}")
-
-                          /* subtitle: Text(
-                          "${"Date : " + DateFormat('dd-MM-yyyy').format(item[1]) + "\nNom du patient : " + item[8]} " +
-                              item[7]) */
-                          ),
+                              "Nombre d'opérations reprogrammés : ${controller.listAnalytics[0][1]}")),
                     )),
                 const SizedBox(
                   height: 10,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text(
-                      "Etat des services",
-                      style: TextStyle(fontSize: 20),
-                    )
-                  ],
+                Container(
+                  // pas assez de temps
+                  padding: EdgeInsets.all(paddingTitle),
+                  child: const Text("Etat des services", style: txtStyle),
                 ),
                 Container(
+                    // pas assez de temps
                     padding: const EdgeInsets.all(10),
                     child: Obx(() => ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),
@@ -60,23 +49,17 @@ class AnalyticsPage extends GetView<PostgresController> {
                                 controller.listEmployeesService[position];
                             print(service);
                             //get your item data here ...
-                            return ListTile(
-                              leading: const Icon(
-                                FontAwesomeIcons.userDoctor,
-                                size: 20,
-                              ),
-                              title: Text(
-                                  "${service.nomService} ${service.nbEmploye}"),
-                            );
+                            return Text(
+                                "${service.nomService} ${service.nbEmploye}");
                           },
                         ))),
                 Container(
-                    padding: const EdgeInsets.all(5),
+                    padding: EdgeInsets.all(paddingTitle),
                     child: Text(
-                        'Médecins généraliste ${controller.listMedecinGeneraliste.length}',
+                        'Médecins généralistes ${controller.listMedecinGeneraliste.length}',
                         style: txtStyle)),
                 Container(
-                    padding: const EdgeInsets.all(5),
+                    padding: EdgeInsets.all(paddingTitle),
                     child: Obx(() => ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),
                           scrollDirection: Axis.vertical,
@@ -100,11 +83,11 @@ class AnalyticsPage extends GetView<PostgresController> {
                           },
                         ))),
                 Container(
-                    padding: const EdgeInsets.all(5),
-                    child: Text('Urologue ${controller.listUrologue.length}',
+                    padding: EdgeInsets.all(paddingTitle),
+                    child: Text('Urologues ${controller.listUrologue.length}',
                         style: txtStyle)),
                 Container(
-                    padding: const EdgeInsets.all(5),
+                    padding: EdgeInsets.all(paddingTitle),
                     child: Obx(() => ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),
                           scrollDirection: Axis.vertical,
@@ -128,13 +111,13 @@ class AnalyticsPage extends GetView<PostgresController> {
                           },
                         ))),
                 Container(
-                    padding: const EdgeInsets.all(5),
+                    padding: EdgeInsets.all(paddingTitle),
                     child: Text(
-                      'Oncologue ${controller.listOncologue.length}',
+                      'Oncologues ${controller.listOncologue.length}',
                       style: txtStyle,
                     )),
                 Container(
-                    padding: const EdgeInsets.all(5),
+                    padding: EdgeInsets.all(paddingTitle),
                     child: Obx(() => ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),
                           scrollDirection: Axis.vertical,
@@ -158,11 +141,11 @@ class AnalyticsPage extends GetView<PostgresController> {
                           },
                         ))),
                 Container(
-                    padding: const EdgeInsets.all(5),
-                    child: Text('Infirmier ${controller.listInfirmier.length}',
+                    padding: EdgeInsets.all(paddingTitle),
+                    child: Text('Infirmiers ${controller.listInfirmier.length}',
                         style: txtStyle)),
                 Container(
-                    padding: const EdgeInsets.all(5),
+                    padding: EdgeInsets.all(paddingTitle),
                     child: Obx(() => ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),
                           scrollDirection: Axis.vertical,

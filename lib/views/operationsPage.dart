@@ -10,7 +10,9 @@ class OperationsPage extends GetView<PostgresController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('Liste des opérations')),
+        appBar: AppBar(
+            title: Obx(() => Text(
+                'Liste des opérations ${controller.listOperation.length}'))),
         body: Obx(() => controller.dbStatus == DbStatus.connected
             ? Obx(() => ListView.builder(
                   itemCount: controller.listOperation.length,

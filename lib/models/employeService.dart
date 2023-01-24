@@ -1,6 +1,6 @@
 class EmployeService {
   String nomService;
-  String nbEmploye;
+  int nbEmploye;
 
   EmployeService({
     required this.nomService,

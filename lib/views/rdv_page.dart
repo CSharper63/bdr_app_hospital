@@ -18,26 +18,12 @@ class RdvPage extends GetView<PostgresController> {
             IconButton(
               icon: const Icon(Icons.add_rounded),
               onPressed: () {
-                Get.defaultDialog(
-                    content: Column(
-                  children: [
-                    TextFormField(
-                        validator: (String? value) {
-                          return (value != null && value.contains('@'))
-                              ? 'Do not use the @ char.'
-                              : null;
-                        },
-                        decoration: const InputDecoration(
-                          icon: Icon(Icons.person),
-                          hintText: 'What do people call you?',
-                          labelText: 'Name *',
-                        )),
-                  ],
-                ));
+                // add rdv, pas assez de temps
               },
             )
           ],
-          title: const Text('Liste des rendez-vous'),
+          title: Obx(
+              () => Text('Liste des rendez-vous ${controller.listRdv.length}')),
         ),
         body: Obx(() => controller.dbStatus == DbStatus.connected
             ? Obx(() => ListView.builder(
@@ -66,7 +52,7 @@ class RdvPage extends GetView<PostgresController> {
                                         DateTimePicker(
                                           type: DateTimePickerType.date,
                                           initialValue: '',
-                                          firstDate: DateTime(2000),
+                                          firstDate: DateTime.now(),
                                           lastDate: DateTime(2100),
                                           dateLabelText:
                                               'Choisir une nouvelle date',
